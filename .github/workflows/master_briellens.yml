@@ -25,12 +25,16 @@ jobs:
       run: |
         npm install
         npm run build --if-present
+        
+    - name: zip results
+      run: |
+        zip -r deploy.zip .
 
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v2
       with:
         name: node-app
-        path: .
+        path: deploy.zip
 
   deploy:
     runs-on: ubuntu-latest
@@ -52,4 +56,4 @@ jobs:
         app-name: 'briellens'
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_67494e8f6f8a461e806ceff912e0f016 }}
-        package: .
+        package: deploy.zip
